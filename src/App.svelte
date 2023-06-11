@@ -35,8 +35,8 @@
   interface planet extends planetData {
     left: number,
     top: number,
-    updateImg: ()=>{}|undefined,
-    updateLabel: ()=>{}|undefined,
+    updateImg: ()=>void|undefined,
+    updateLabel: ()=>void|undefined,
   }
   const planets:planet[] = []
   planetsBase.forEach(element => {
@@ -49,7 +49,8 @@
       orbit: element.orbit,
       orbitRadius: element.orbitRadius,
       radius: element.radius,
-      update: undefined
+      updateImg: undefined,
+      updateLabel: undefined,
     })
   })
 
@@ -111,11 +112,12 @@
     }
   }
 
-  // onMount(()=>{
+  let dateText:string = "undefined"
+  onMount(()=>{
     let iter:number = 0
     function animate() {
-      console.log(today)
       const T:number = today+(iter/CENTURY)
+      dateText = (new Date(T*CENTURY*DAY*1000 + +J2000)).toDateString()
       for (const planet of planets) {
         const computed = computeOrbit(planet.orbit, T)
         planet.top = computed.pos.y
@@ -128,7 +130,7 @@
       requestAnimationFrame(animate)
     }
     animate()
-  // })
+  })
 
   function bindImg(element:HTMLElement,planet:planet) {
     planet.updateImg = ()=>{
@@ -142,12 +144,6 @@
       element.style.top = (planet.top*distanceUnit + planet.radius/2*sizeUnit) + "px"
     }
   }
-
-  // let computed = keys.reduce((carry, el) => {
-  //   const variation = EARTH.cy || 0;
-  //   carry[el] = EARTH.base[el] + (variation * T);
-  //   return carry;
-  // }, computed);
 
 </script>
 
@@ -173,14 +169,15 @@
   </Panzoom>
   <div id="topbar">
     <p class="title">행성궤도 시뮬레이터 dev@qwreey.kr</p>
-    <p class="inputLabel">행성 축소 배율(km*mut)</p>
+    <p class="inputLabel">행성 축소 배율(km)</p>
     <input class="input" bind:value={sizeUnitMut}>
-    <p class="inputLabel">궤도 반지름 축소 배율(au*mut)</p>
-    <input class="input" bind:value={distanceUnitMut}>
-    <p class="inputLabel">태양 축소 배율(au*mut)</p>
+    <p class="inputLabel">궤도 축소 배율(au)</p>
+    <input class="input" style:width=150px bind:value={distanceUnitMut}>
+    <p class="inputLabel">태양 축소 배율(au)</p>
     <input class="input" bind:value={sunMut}>
     <p class="inputLabel">초당 일 수(days)</p>
     <input class="input" bind:value={daysMut}>
+    <p class="inputLabel">시간: {dateText}</p>
   </div>
 </main>
 
@@ -200,7 +197,7 @@
   }
   .input {
     margin-right: 12px;
-    width: 150px;
+    width: 60px;
     font-size: 0.8rem;
   }
   .planet {
