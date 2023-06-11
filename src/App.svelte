@@ -167,7 +167,6 @@
         <p
           use:bindLabel={planet}
           class="planet"
-          style:font-size=10em
         >{planet.label}</p>
       {/each}
     </div>
@@ -186,6 +185,12 @@
 </main>
 
 <style>
+  #planetHolder p {
+    font-size: 10em;
+    color: white;
+    width: 100px;
+    transform: translateX(-100px);
+  }
   .title {
     margin-right: 12px;
   }
