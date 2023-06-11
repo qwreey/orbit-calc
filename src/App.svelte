@@ -22,14 +22,14 @@
 
   // calculated units
   let sizeUnitMut:number = 20
-  let distanceUnitMut:number = 8000000000000000
+  let distanceUnitMut:number = 20000000
   let sunMut:number = 40
   let sizeUnit:number
   let distanceUnit:number
   let daysMut:number = 60
   $: {
     sizeUnit = 1/sizeUnitMut
-    distanceUnit = AU/distanceUnitMut
+    distanceUnit = 1/distanceUnitMut
   }
 
   interface planet extends planetData {
